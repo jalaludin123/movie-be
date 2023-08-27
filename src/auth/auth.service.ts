@@ -6,6 +6,7 @@ import { LoginUserInput } from './dto/login-input-user';
 import { RegisterUserInput } from './dto/register-input-user';
 import { ConfigService } from '@nestjs/config';
 import { User } from 'src/user/entities/user.entity';
+import { UserDetail } from './types';
 
 
 @Injectable()
@@ -13,7 +14,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwt: JwtService,
-    private config: ConfigService
+    private config: ConfigService,
   ) { }
 
   async validateUser(email: string): Promise<any> {
@@ -23,6 +24,19 @@ export class AuthService {
       return user.access_token;
     }
     return null;
+  }
+
+  async validateuserGoogle(userDetail: UserDetail) {
+    const user = await this.userService.getEmail(userDetail.email);
+    if (user) return user;
+    const newUser = this.userService.signupUser(userDetail);
+    return newUser;
+  }
+
+  async loginGoogle(req: any): Promise<any> {
+    const { access_token } = await this.createToken(req.id, req.email, req.role);
+    await this.userService.updateToken(access_token, req.id)
+    return { access_token: access_token, user: req };
   }
 
   async signin(loginInputUser: LoginUserInput) {

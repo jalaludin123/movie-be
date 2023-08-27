@@ -19,7 +19,7 @@ export class User {
   @Field()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   password: string;
 

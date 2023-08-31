@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Product } from 'src/product/entities/product.entity';
-import Role from 'src/data_enum/role/roles';
+import Role from 'src/common/data_enum/role/roles';
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Unique, OneToMany } from 'typeorm';
 
 @Entity()
@@ -19,7 +19,7 @@ export class User {
   @Field()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field()
   password: string;
 

@@ -2,7 +2,7 @@ import { Entity, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, PrimaryG
 import { ObjectType, Field, Int } from "@nestjs/graphql";
 import { User } from "src/user/entities/user.entity";
 import { Movie } from "src/movies/entities/movies.entity";
-import StatusPemesanan from "src/data_enum/pemesanan/status-pemesanan";
+import StatusPemesanan from "src/common/data_enum/pemesanan/status-pemesanan";
 
 @Entity()
 @ObjectType()

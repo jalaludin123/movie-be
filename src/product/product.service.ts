@@ -7,7 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { MoviesService } from 'src/movies/movies.service';
 import { User } from 'src/user/entities/user.entity';
 import { Movie } from 'src/movies/entities/movies.entity';
-import StatusPemesanan from 'src/data_enum/pemesanan/status-pemesanan';
+import StatusPemesanan from 'src/common/data_enum/pemesanan/status-pemesanan';
 
 @Injectable()
 export class ProductService {

@@ -8,7 +8,7 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { UseGuards } from '@nestjs/common';
 import { Roles } from 'src/auth/decorators/role.decorator';
-import Role from 'src/data_enum/role/roles';
+import Role from 'src/common/data_enum/role/roles';
 import { OutputResponseProduct } from './dto/output-response-product';
 
 @Resolver(() => Product)

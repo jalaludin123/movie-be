@@ -6,7 +6,7 @@ import { OutputResponse } from './dto/output-response';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
-import Role from 'src/data_enum/role/roles';
+import Role from 'src/common/data_enum/role/roles';
 import { Roles } from 'src/auth/decorators/role.decorator';
 
 @Resolver()

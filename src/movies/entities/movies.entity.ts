@@ -18,6 +18,10 @@ export class Movie {
   @Field()
   hargaMovie: string;
 
+  @Column()
+  @Field()
+  description: string;
+
   @Column({ default: 'y' })
   @Field()
   active: string;

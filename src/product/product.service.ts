@@ -26,8 +26,8 @@ export class ProductService {
     return products;
   }
 
-  async product(id: number): Promise<Product> {
-    const product = await this.productRepository.findOne({ where: { userId: id } })
+  async product(id: number): Promise<Product[]> {
+    const product = await this.productRepository.find({ where: { userId: id } })
     if (!product) {
       throw new ForbiddenException('Tidak data product')
     }
@@ -36,36 +36,38 @@ export class ProductService {
 
   async createProduct(user: any, createProductInput: CreateSewaFilm): Promise<Product> {
     const harga = await this.movieService.movie(createProductInput.movieId);
-    const subTotal = parseInt(harga.hargaMovie) * createProductInput.jumlahPesan;
+    const subTotal = parseInt(harga.hargaMovie) * parseInt(createProductInput.batas_waktu);
     const product = this.productRepository.create({
       userId: user.sub,
       movieId: createProductInput.movieId,
       harga: harga.hargaMovie,
       total: subTotal,
-      jumlahPesan: createProductInput.jumlahPesan
+      batas_waktu: createProductInput.batas_waktu,
+      status_pembayaran: createProductInput.status_pembayaran
     });
     const data = this.productRepository.save(product);
     return data;
   }
 
   async updateProduct(user: any, id: number, updateProductInput: Partial<CreateSewaFilm>): Promise<any> {
-    const product = await this.productRepository.find({
+    const product = await this.productRepository.findOne({
       where: {
         id,
         userId: user.sub,
-        status_pemesanan: StatusPemesanan.ORDER
+        status_pemesanan: StatusPemesanan.RENT
       }
     });
     if (!product) {
       throw new ForbiddenException('Tidak data product')
     }
     const harga = await this.movieService.movie(updateProductInput.movieId);
-    const subTotal = parseInt(harga.hargaMovie) * updateProductInput.jumlahPesan;
+    const subTotal = parseInt(harga.hargaMovie) * parseInt(updateProductInput.batas_waktu);
     await this.productRepository.update(id, {
       movieId: updateProductInput.movieId,
       harga: harga.hargaMovie,
       total: subTotal,
-      jumlahPesan: updateProductInput.jumlahPesan
+      batas_waktu: updateProductInput.batas_waktu,
+      status_pembayaran: updateProductInput.status_pembayaran
     });
     return {
       message: "updated success",
@@ -77,19 +79,17 @@ export class ProductService {
     const product = await this.productRepository.findOne({
       where: {
         id,
-        status_pemesanan: StatusPemesanan.ORDER,
-        status_pembayaran: 'BELUM BAYAR'
+        status_pemesanan: StatusPemesanan.RENT,
       }
     });
     if (!product) {
       throw new ForbiddenException('product not found');
     }
     await this.productRepository.update(id, {
-      status_pembayaran: "SUDAH DI BAYAR",
-      status_pemesanan: StatusPemesanan.ACCEPTED
+      status_pemesanan: StatusPemesanan.RETURN
     });
     return {
-      message: "Pemesanan Sudah Di Terima",
+      message: "Success Movie sudah di kembalikan",
       product
     }
   }

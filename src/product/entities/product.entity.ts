@@ -3,6 +3,7 @@ import { ObjectType, Field, Int } from "@nestjs/graphql";
 import { User } from "src/user/entities/user.entity";
 import { Movie } from "src/movies/entities/movies.entity";
 import StatusPemesanan from "src/common/data_enum/pemesanan/status-pemesanan";
+import Payment from "src/common/data_enum/payment/payment";
 
 @Entity()
 @ObjectType()
@@ -32,14 +33,14 @@ export class Product {
   @Field()
   harga: string;
 
-  @Column()
+  @Column({ default: "1 JAM" })
   @Field()
-  jumlahPesan: number;
+  batas_waktu: string;
 
   @Column({
     type: 'enum',
     enum: StatusPemesanan,
-    default: StatusPemesanan.ORDER
+    default: StatusPemesanan.RENT
   })
   @Field()
   status_pemesanan: StatusPemesanan;
@@ -52,7 +53,7 @@ export class Product {
   @Field()
   status: string;
 
-  @Column({ default: 'BELUM BAYAR' })
+  @Column()
   @Field()
   status_pembayaran: string;
 

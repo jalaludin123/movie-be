@@ -1,7 +1,6 @@
 enum StatusPemesanan {
-  ORDER = "ORDER",
-  ACCEPTED = "ACCEPTED",
-  REJECTED = "REJECTED"
+  RENT = "RENT",
+  RETURN = "RETURN"
 }
 
 export default StatusPemesanan;

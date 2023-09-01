@@ -1,12 +1,15 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import StatusPemesanan from 'src/common/data_enum/pemesanan/status-pemesanan';
+import Payment from 'src/common/data_enum/payment/payment';
 
 @InputType()
 export class CreateSewaFilm {
   @Field(type => Int)
   movieId: number;
 
-  @Field(type => Int)
-  jumlahPesan: number;
+  @Field({ nullable: true, defaultValue: '1 JAM' })
+  batas_waktu: string;
+
+  @Field()
+  status_pembayaran: Payment;
 
 }

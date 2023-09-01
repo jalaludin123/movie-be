@@ -8,4 +8,7 @@ export class CreateMovieInput {
   @Field()
   hargaMovie: string;
 
+  @Field()
+  description: string;
+
 }

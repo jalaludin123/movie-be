@@ -32,14 +32,14 @@ export class Product {
   @Field()
   harga: string;
 
-  @Column()
+  @Column({ default: "1 JAM" })
   @Field()
-  jumlahPesan: number;
+  batas_waktu: string;
 
   @Column({
     type: 'enum',
     enum: StatusPemesanan,
-    default: StatusPemesanan.ORDER
+    default: StatusPemesanan.RENT
   })
   @Field()
   status_pemesanan: StatusPemesanan;
@@ -52,7 +52,7 @@ export class Product {
   @Field()
   status: string;
 
-  @Column({ default: 'BELUM BAYAR' })
+  @Column()
   @Field()
   status_pembayaran: string;
 

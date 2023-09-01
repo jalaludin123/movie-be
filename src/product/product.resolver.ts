@@ -24,10 +24,10 @@ export class ProductResolver {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.CUSTOMER)
-  @Query(() => Product)
+  @Query(() => [Product])
   async product(
     @Context() context
-  ): Promise<Product> {
+  ): Promise<Product[]> {
     return await this.productService.product(context.req.user['sub'])
   }
 

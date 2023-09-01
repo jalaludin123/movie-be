@@ -6,6 +6,7 @@ type Movie {
   id: Int!
   nameMovie: String!
   hargaMovie: String!
+  description: String!
   active: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -24,7 +25,7 @@ type Product {
   movieId: Int!
   movie: Movie!
   harga: String!
-  jumlahPesan: Float!
+  batas_waktu: String!
   status_pemesanan: String!
   total: Float!
   status: String!
@@ -77,7 +78,7 @@ type Query {
   movies: [Movie!]!
   movie(id: Float!): Movie!
   products: [Product!]!
-  product: Product!
+  product: [Product!]!
   deleteProduct(id: Float!): OutputResponseProduct!
 }
 
@@ -116,9 +117,11 @@ input CreateUserInput {
 input CreateMovieInput {
   nameMovie: String!
   hargaMovie: String!
+  description: String!
 }
 
 input CreateSewaFilm {
   movieId: Int!
-  jumlahPesan: Int!
+  batas_waktu: String = "1 JAM"
+  status_pembayaran: String!
 }

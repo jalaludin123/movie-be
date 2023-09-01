@@ -21,9 +21,13 @@ export class UserService {
   }
 
   async createUser(createUserInput: CreateUserInput): Promise<User> {
+    const email = this.getEmail(createUserInput.email);
+    if (email) {
+      throw new ForbiddenException('Akun sudah digunakan');
+    }
     createUserInput.password = await argon.hash(createUserInput.password)
     const user = this.userRepository.create(createUserInput);
-    return this.userRepository.save(user)
+    return this.userRepository.save(user);
   }
 
   async getEmail(email: string): Promise<User> {

@@ -10,6 +10,8 @@ import { UseGuards } from '@nestjs/common';
 import { Roles } from 'src/auth/decorators/role.decorator';
 import Role from 'src/common/data_enum/role/roles';
 import { OutputResponseProduct } from './dto/output-response-product';
+import { Filter } from 'src/common/dto/page';
+import { OutputResponseFilter } from './dto/output-response-filter';
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -18,8 +20,16 @@ export class ProductResolver {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Query(() => [Product])
-  async products(): Promise<Product[]> {
-    return await this.productService.Products()
+  async getproducts(): Promise<Product[]> {
+    return await this.productService.getProducts()
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Query(() => OutputResponseFilter)
+  async products(@Args('filter') alias: Filter) {
+    const builder = await this.productService.products(alias);
+    return builder;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

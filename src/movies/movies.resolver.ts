@@ -8,6 +8,8 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import Role from 'src/common/data_enum/role/roles';
 import { Roles } from 'src/auth/decorators/role.decorator';
+import { Filter } from 'src/common/dto/page';
+import { OutputResponseMovie } from './dto/output-response-movie';
 
 @Resolver()
 export class MoviesResolver {
@@ -15,8 +17,15 @@ export class MoviesResolver {
 
   @UseGuards(JwtAuthGuard)
   @Query(() => [Movie])
-  async movies(): Promise<Movie[]> {
-    return this.movieService.movies()
+  async getMovies(): Promise<Movie[]> {
+    return this.movieService.getMovies()
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Query(() => OutputResponseMovie)
+  async movies(@Args('filter') alias: Filter) {
+    const builder = await this.movieService.movies(alias);
+    return builder;
   }
 
   @UseGuards(JwtAuthGuard)

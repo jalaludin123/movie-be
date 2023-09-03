@@ -61,9 +61,23 @@ type OutputResponseUser {
   user: User!
 }
 
+type OutputResponseFilterUser {
+  data: [User!]!
+  total: Float!
+  page: Float!
+  last_page: Float
+}
+
 type OutputResponse {
   message: String!
   movie: Movie!
+}
+
+type OutputResponseMovie {
+  data: [Movie!]!
+  total: Float!
+  page: Float!
+  last_page: Float
 }
 
 type OutputResponseProduct {
@@ -71,15 +85,30 @@ type OutputResponseProduct {
   product: Product!
 }
 
+type OutputResponseFilter {
+  data: [Product!]!
+  total: Float!
+  page: Float!
+  last_page: Float
+}
+
 type Query {
   logout: LogOutUser!
-  users: [User!]!
+  getusers: [User!]!
+  users(filter: Filter!): OutputResponseFilterUser!
   getProfile: User!
-  movies: [Movie!]!
+  getMovies: [Movie!]!
+  movies(filter: Filter!): OutputResponseMovie!
   movie(id: Float!): Movie!
-  products: [Product!]!
+  getproducts: [Product!]!
+  products(filter: Filter!): OutputResponseFilter!
   product: [Product!]!
   deleteProduct(id: Float!): OutputResponseProduct!
+}
+
+input Filter {
+  filter: String
+  next: String
 }
 
 type Mutation {

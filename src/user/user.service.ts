@@ -6,18 +6,38 @@ import { CreateUserInput } from './dto/create-input-user';
 import * as argon from "argon2";
 import { RegisterUserInput } from 'src/auth/dto/register-input-user';
 import { UpdateUserInput } from './dto/update-input-user';
+import { Filter } from 'src/common/dto/page';
 
 @Injectable()
 export class UserService {
   constructor(@InjectRepository(User) private userRepository: Repository<User>) { }
 
-  async users(): Promise<User[]> {
+  async getusers(): Promise<User[]> {
     const users = this.userRepository.find({
       where: {
         active: 'y'
       }
     })
     return users;
+  }
+
+  async users(alias: Filter) {
+    const builder = this.userRepository.createQueryBuilder('user');
+    builder.where('user.active = :active', { active: 'y' })
+    if (alias.filter) {
+      builder.where("user.name LIKE :s", { s: `%${alias.filter}%` })
+    }
+    const page: number = parseInt(alias.next as any) || 1;
+    const perPage = 9;
+    const total = await builder.getCount();
+    builder.offset((page - 1) * perPage).limit(perPage);
+    return {
+      data: await builder.getMany(),
+      total,
+      page,
+      last_page: Math.ceil(total / perPage)
+    };
+
   }
 
   async createUser(createUserInput: CreateUserInput): Promise<User> {

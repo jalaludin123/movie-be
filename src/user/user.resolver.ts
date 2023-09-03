@@ -8,6 +8,8 @@ import { RolesGuard } from 'src/auth/guard/roles.guard';
 import Role from 'src/common/data_enum/role/roles';
 import { Roles } from 'src/auth/decorators/role.decorator';
 import { OutputResponseUser } from './dto/output-response-user';
+import { OutputResponseFilterUser } from './dto/output-response-filter';
+import { Filter } from 'src/common/dto/page';
 
 @Resolver()
 export class UserResolver {
@@ -16,8 +18,16 @@ export class UserResolver {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Query(() => [User])
-  async users(): Promise<User[]> {
-    return await this.userService.users();
+  async getusers(): Promise<User[]> {
+    return await this.userService.getusers();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Query(() => OutputResponseFilterUser)
+  async users(@Args('filter') alias: Filter) {
+    const builder = await this.userService.users(alias);
+    return builder;
   }
 
   // @Query(() => User)

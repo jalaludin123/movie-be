@@ -8,6 +8,7 @@ import { MoviesService } from 'src/movies/movies.service';
 import { User } from 'src/user/entities/user.entity';
 import { Movie } from 'src/movies/entities/movies.entity';
 import StatusPemesanan from 'src/common/data_enum/pemesanan/status-pemesanan';
+import { Filter } from 'src/common/dto/page';
 
 @Injectable()
 export class ProductService {
@@ -17,13 +18,34 @@ export class ProductService {
     private movieService: MoviesService
   ) { }
 
-  async Products(): Promise<Product[]> {
+  async getProducts(): Promise<Product[]> {
     const products = await this.productRepository.find({
       where: {
         status: 'y'
       }
     })
     return products;
+  }
+
+  async products(alias: Filter) {
+    const builder = this.productRepository.createQueryBuilder('product');
+    builder.leftJoin('product.user', 'user');
+    builder.leftJoin('product.movie', 'movie');
+    builder.where('product.status = :status', { status: 'y' });
+    if (alias.filter) {
+      builder.andWhere("movie.nameMovie LIKE :s OR user.name LIKE :s", { s: `%${alias.filter}%` })
+    }
+    const page: number = parseInt(alias.next as any) || 1;
+    const perPage = 9;
+    const total = await builder.getCount();
+    builder.offset((page - 1) * perPage).limit(perPage);
+    return {
+      data: await builder.getMany(),
+      total,
+      page,
+      last_page: Math.ceil(total / perPage)
+    };
+
   }
 
   async product(id: number): Promise<Product[]> {

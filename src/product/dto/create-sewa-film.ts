@@ -1,15 +1,16 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
+import { IsNotEmpty } from 'class-validator';
 import Payment from 'src/common/data_enum/payment/payment';
 
 @InputType()
 export class CreateSewaFilm {
+
+  @IsNotEmpty()
   @Field(type => Int)
   movieId: number;
 
-  @Field({ nullable: true, defaultValue: '1 JAM' })
-  batas_waktu: string;
-
+  @IsNotEmpty()
   @Field()
-  status_pembayaran: Payment;
+  pembayaran: Payment;
 
 }

@@ -28,14 +28,6 @@ export class Product {
   @Field(type => Movie)
   movie: Movie;
 
-  @Column()
-  @Field()
-  harga: string;
-
-  @Column({ default: "1 JAM" })
-  @Field()
-  batas_waktu: string;
-
   @Column({
     type: 'enum',
     enum: StatusPemesanan,
@@ -54,7 +46,7 @@ export class Product {
 
   @Column()
   @Field()
-  status_pembayaran: string;
+  pembayaran: string;
 
   @CreateDateColumn({
     name: 'created_at',

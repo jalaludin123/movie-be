@@ -36,7 +36,7 @@ export class ProductService {
       builder.andWhere("movie.nameMovie LIKE :s OR user.name LIKE :s", { s: `%${alias.filter}%` })
     }
     const page: number = parseInt(alias.next as any) || 1;
-    const perPage = 9;
+    const perPage = 2;
     const total = await builder.getCount();
     builder.offset((page - 1) * perPage).limit(perPage);
     return {
@@ -58,14 +58,11 @@ export class ProductService {
 
   async createProduct(user: any, createProductInput: CreateSewaFilm): Promise<Product> {
     const harga = await this.movieService.movie(createProductInput.movieId);
-    const subTotal = parseInt(harga.hargaMovie) * parseInt(createProductInput.batas_waktu);
     const product = this.productRepository.create({
       userId: user.sub,
       movieId: createProductInput.movieId,
-      harga: harga.hargaMovie,
-      total: subTotal,
-      batas_waktu: createProductInput.batas_waktu,
-      status_pembayaran: createProductInput.status_pembayaran
+      total: parseInt(harga.hargaMovie),
+      pembayaran: createProductInput.pembayaran
     });
     const data = this.productRepository.save(product);
     return data;
@@ -83,13 +80,10 @@ export class ProductService {
       throw new ForbiddenException('Tidak data product')
     }
     const harga = await this.movieService.movie(updateProductInput.movieId);
-    const subTotal = parseInt(harga.hargaMovie) * parseInt(updateProductInput.batas_waktu);
     await this.productRepository.update(id, {
       movieId: updateProductInput.movieId,
-      harga: harga.hargaMovie,
-      total: subTotal,
-      batas_waktu: updateProductInput.batas_waktu,
-      status_pembayaran: updateProductInput.status_pembayaran
+      total: parseInt(harga.hargaMovie),
+      pembayaran: updateProductInput.pembayaran
     });
     return {
       message: "updated success",

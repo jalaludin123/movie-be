@@ -24,12 +24,10 @@ type Product {
   user: User!
   movieId: Int!
   movie: Movie!
-  harga: String!
-  batas_waktu: String!
   status_pemesanan: String!
   total: Float!
   status: String!
-  status_pembayaran: String!
+  pembayaran: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -151,6 +149,5 @@ input CreateMovieInput {
 
 input CreateSewaFilm {
   movieId: Int!
-  batas_waktu: String = "1 JAM"
-  status_pembayaran: String!
+  pembayaran: String!
 }
